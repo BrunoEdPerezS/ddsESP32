@@ -59,7 +59,7 @@ Con todo esto dicho, ahora nos hace un poco más de sentido la clásica vista tr
 
 WAVETABLE TRIDIMENSIONAL
 
-Lindo, peeeeero, ¿y el sonido? Bueno, los valores de la amplitud en tabla anterior en realidad son muestras (samples, para los amigos) de dicha onda, lo único que tenemos que hacer para obtener sonido a partir de ellos, es cargar la wavetable en memoria, escribir un pequeño código que nos permita seleccionar cual onda con distinto contenido armónico queremos, y comenzar a reproducir los valores de la amplitud en función a su índice (fase).-
+Lindo, peeeeero, ¿y el sonido? Bueno, los valores de la amplitud en tabla anterior en realidad son muestras (samples, para los amigos) de dicha onda, lo único que tenemos que hacer para obtener sonido a partir de ellos, es cargar la wavetable en memoria, escribir un pequeño código que nos permita seleccionar cual onda con distinto contenido armónico queremos, y comenzar a reproducir los valores de la amplitud en función a su índice (fase).
 
 *DISCLAIMER: para que la explicación sea más fácil utilizaremos wavetables con una sola dimensión, vamos a eliminar el índice de onda, de forma que cada wavetable solo posee 1 forma de onda disponible. Básicamente será un **vector** que almacena los datos de amplitud.*
 *A modo de tabla, la wavetable se vería como.*
@@ -350,3 +350,13 @@ Además no hablé de como cambiar las notas en medio de la ejecución, bueno com
 Muchas gracias por su atención.
 
 # Referencias
+
+https://www.weigu.lu/microcontroller/dds/index.html
+
+https://www.youtube.com/watch?v=xiby-mkIgQ0&t=1212s
+
+https://www.youtube.com/results?search_query=DDS+arduino
+
+https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/gptimer.html
+
+https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/api/timer.html
