@@ -23,13 +23,13 @@ Si han tenido cursos de física decentes puede skipear esta parte, pero de todas
 
 Cuando representamos una oscilación básicamente lo que queremos representar es ese "movimiento" o "variación" de la "cantidad" en el tiempo. Para este fin llamaremos **"amplitud"** al valor de dicha cantidad, y **"fase"** a la situación instantánea del **ciclo** , respecto al punto de referencia.
 
-Bien, vamos a explicar más detalladamente esto de la fase. Cuando tenemos una oscilación, existe un punto, al cual llamamos "referencia" que es básicamente el punto de equilibrio respecto al cual varía la amplitud. De esta forma podemos decir que un "ciclo", es el recorrido que representa ese movimiento de vaivén de la oscilación, y que su **"periodo"** es **cuanto tarda la onda en realizar aquel movimiento.** Ahora, como este movimiento es periódico, osea que se repite, se nos hace más "visual" representarlo como un punto recorriendo una circunferencia, donde los valores del eje X representan el **tiempo** y los valores del eje Y la **amplitud**.
+Bien, vamos a explicar más detalladamente esto de la fase. Cuando tenemos una oscilación, existe un punto, al cual llamamos "referencia" que es básicamente el punto de equilibrio respecto al cual varía la amplitud. De esta forma podemos decir que un "ciclo", es el recorrido que representa ese movimiento de vaivén de la oscilación, y que su **"periodo"** es **cuanto tarda la onda en realizar aquel movimiento.** Ahora, como este movimiento es periódico, osea que se repite, se nos hace más "visual" representarlo como un punto recorriendo una circunferencia, de esta forma la "onda" que se genera, será la representación del valor de amplitud correspondiente a la posicion vertical dicho punto a medida que recorremos el círculo.
 
-CIRCULO
+![Circulo y onda](docs/assets/images/Circulo_Onda.svg)
 
-De esta forma es posible deducir que la **fase** es una representación de "en que posición se encuentra la onda a lo largo del ciclo", y como dicho ciclo es representado como una circunferencia, su posición PUEDE ser representada por el ángulo entre la posición actual de la oscilación y el punto de referencia. A partir de esto, es que podemos ver que realmente, el valor de la amplitud de dicha onda, es una función de la **fase** la cual varía de forma constante en función al tiempo.
+A partir de esto es que podemos decir, que la posición del punto, a lo largo de la trayectoriam representa la **fase**, "en que posición se encuentra la onda a lo largo del ciclo", y como dicho ciclo es representado en la circunferencia, su posición PUEDE ser representada por el ángulo entre la posición actual de la oscilación y el punto de referencia. A partir de esto, es que podemos ver que realmente, el valor de la amplitud de dicha onda, es una función de la **fase** la cual varía de forma constante en función al tiempo.
 
-Espero que con esto haya quedado claro el tema de la fase. Sin embargo aún queda hablar de otra propiedad importante de las ondas, la cual es la frecuencia.
+Espero que con esto haya quedado claro el tema de la fase (sino pueden revisar el concepto de **"fasor"** en algún libro de física). Sin embargo aún queda hablar de otra propiedad importante de las ondas, la cual es la frecuencia.
 Esta propiedad puede ser definida como...
 > ... la medida del número de veces que se repite la oscilación en cierto instante de tiempo.
 
@@ -57,7 +57,7 @@ Es efectivamente un array de dos dimensiones. Pero con una particularidad. Para 
 
 Con todo esto dicho, ahora nos hace un poco más de sentido la clásica vista tridimensional que poseen los osciladores en los sintetizadores de wavetable como Serum y Vital. Básicamente graficamos, los valores de amplitud, su correspondiente índice y el índice de onda.
 
-WAVETABLE TRIDIMENSIONAL
+![Representacion](docs/assets/images/wavetable_representacion.svg)
 
 Lindo, peeeeero, ¿y el sonido? Bueno, los valores de la amplitud en tabla anterior en realidad son muestras (samples, para los amigos) de dicha onda, lo único que tenemos que hacer para obtener sonido a partir de ellos, es cargar la wavetable en memoria, escribir un pequeño código que nos permita seleccionar cual onda con distinto contenido armónico queremos, y comenzar a reproducir los valores de la amplitud en función a su índice (fase).
 
@@ -74,11 +74,11 @@ Bueno ahora, imaginemos que tengo una tabla, como la de arriba, con los valores 
 
 Para hacer esto necesitaremos, primero que nada la wavetable, un contador llamado **adress pointer**, que representará el índice al cual consultaremos para extraer su correspondiente amplitud, y una tercera variable, llamada **incremento de fase**, la cual nos dará el valor del **adress pointer** para obtener una frecuencia determinada. ¿Qué? Bueno, volvamos al circulo.
 
-CIRCULO DISCRETO
+![Representacion](docs/assets/images/wavetalbe_sine.svg)
 
 En el caso de nuestra querida wavetable, la circunferencia que representa el ciclo, es discreta, por lo tanto es un grupo de puntos finitos que representan cada uno de los samples que componen la onda. Para recorrerla, basta con moverse por cada uno de ellos, es decir el **adress pointer** debe tomar el valor de **fase** correspondiente a cada uno de esos puntos. Ahora, ¿recuerdan el spoiler de la sección anterior? Si yo quisiera una mayor frecuencia, necesito recorrer la circunferencia más rápido. Por lo tanto, lo que puedo hacer es "saltarme" una determinada cantidad de puntos, es decir, en vez de incrementar mi contador de 1 en 1, lo hago de 10 en 10, o de 15 en 15, de esta forma puedo recorrer mas rápido la circunferencia y aumentar la frecuencia. Entonces, el diagrama de bloques, de la solución que hemos encontrado para reproducir la wavetable se vería así.
 
-DIAGRAMA DE BLOQUES
+![Representacion](docs/assets/images/wavetableOSC.svg)
 
 Seguro algún chistoso se preguntó si hay una forma de disminuir la frecuencia, y la verdad es que si, pero conlleva un problema serio.
 Cuando trabajamos con sistemas digitales, sabemos, supongo que todos, que un dicho digital realiza sus "actividades" de acuerdo a una señal de reloj, que de hecho esta en el diagrama. Bueno, por cada "tick" del reloj, nuestro computador (microcontrolador, microprocesador, lo que sea), actualizará el valor del **adress pointer** de acuerdo al **incremento de fase**. El valor mínimo para el incremento de fase es 1. Ya que el paso mínimo para recorrer el circulo es un punto a la vez. Por lo tanto la frecuencia mínima a la que podemos reproducir la onda es la frecuencia del reloj. Si quieren menor frecuencia, deben cambiar el reloj (cosa que si es posible con preescalers y blablabla, pero es poco práctico). Además esto deja en evidencia que todas las frecuencias que nos es posible reproducir, serán múltiplos de la frecuencia de dicho reloj.
@@ -349,14 +349,16 @@ Además no hablé de como cambiar las notas en medio de la ejecución, bueno com
 
 Muchas gracias por su atención.
 
-# Referencias
+## Referencias y links interesantes
 
-https://www.weigu.lu/microcontroller/dds/index.html
+Hewitt, P. G. (1998). Física conceptual.
 
-https://www.youtube.com/watch?v=xiby-mkIgQ0&t=1212s
+<https://www.weigu.lu/microcontroller/dds/index.html>
 
-https://www.youtube.com/results?search_query=DDS+arduino
+<https://www.youtube.com/watch?v=xiby-mkIgQ0&t=1212s>
 
-https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/gptimer.html
+<https://www.youtube.com/results?search_query=DDS+arduino>
 
-https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/api/timer.html
+<https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/gptimer.html>
+
+<https://espressif-docs.readthedocs-hosted.com/projects/arduino-esp32/en/latest/api/timer.html>
