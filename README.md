@@ -200,28 +200,28 @@ El NCO lo implementaremos en la ISR, para esto declaramos las variables necesari
 
 Después creamos la ISR, como nota, todas las ISR creadas en la ESP32 utilizar el prefijo IRAM_ATTR, asi que quedaría de esta forma:
 
-   void IRAM_ATTR onTimer(){
-   acumuladorFASE = acumuladorFASE + M;
-   addressPOINTER = acumuladorFASE >> 24; //Shiftear los bits
+      void IRAM_ATTR onTimer(){
+      acumuladorFASE = acumuladorFASE + M;
+      addressPOINTER = acumuladorFASE >> 24; //Shiftear los bits
 
-   // Condiciones para el cambio de onda
-   if (count ==0)
-   {
-      dacWrite(25, SINE[addressPOINTER]);
-   }
-   if (count ==1)
-   {
-      dacWrite(25, SAW[addressPOINTER]);
-   }
-   if (count ==2)
-   {
-      dacWrite(25, TRIANGLE[addressPOINTER]);
-   }
-   if (count ==3)
-   {
-      dacWrite(25, SQUARE[addressPOINTER]);
-   }
-   }
+      // Condiciones para el cambio de onda
+      if (count ==0)
+      {
+         dacWrite(25, SINE[addressPOINTER]);
+      }
+      if (count ==1)
+      {
+         dacWrite(25, SAW[addressPOINTER]);
+      }
+      if (count ==2)
+      {
+         dacWrite(25, TRIANGLE[addressPOINTER]);
+      }
+      if (count ==3)
+      {
+         dacWrite(25, SQUARE[addressPOINTER]);
+      }
+      }
 
 Si se dan cuenta, en la tercera linea shifteamos los bits para poder indexar la wavetable.
 Además hay ciertas condiciones nombradas más abajo (si parece que rompí un poco la regla de "sólo lo necesario" en la ISR, pero como vemos,la ejecución de este código no afecta mucho al programa). ¿Para que son? (se que hay mejores formas de hacer esto, pero esta es bastante visual) básicamente, estas condiciones son utilizadas para cambiar de onda en medio de la ejecución del programa. Esto a través de un contador que va entre 0 y 3 (tenemos 4 formas de onda), el cual aumenta cada vez que pulsamos un determinado botón.
@@ -230,29 +230,29 @@ Ahora para cambiar la onda, ya dije que utilizábamos un contador que aumenta co
 
 Anteriormente creamos una interrupción que depende de un timer, ahora crearemos una que depende de un pin, en resumidas cuentas, al accionar un pulsador conectado a un pin, la lectura de dicho pin triggeará la interrupción. Para esto escribimos:
 
-   pinMode(BUTTON, INPUT_PULLDOWN);
-   attachInterrupt(BUTTON, selector, FALLING);
+      pinMode(BUTTON, INPUT_PULLDOWN);
+      attachInterrupt(BUTTON, selector, FALLING);
 
 Así de sencillo, iniciamos el pin en la primera línea, y luego lo conectamos a la interrupción `selector()`, el tercer argumento nos dice si debemos accionar la interrupción cuando el pin está `HIGH`,`LOW)`,`RISING)` o `FALLING`. Ahí depende del tipo de botón conectado y blablabla, yo utilicé `FALLING` por comodidad.
 
 Ahora la ISR del selector:
 
-   void IRAM_ATTR selector(){
-      buttonTIME = millis();
-   //Condicion para el debounce
-   if (buttonTIME - lastBTIME > 250)
-   {
-      //Aumento del contador
-      if (count == 3) {
-         count = 0;
-      }
-      else {
-         count = count + 1;
-      }
+      void IRAM_ATTR selector(){
+         buttonTIME = millis();
+      //Condicion para el debounce
+      if (buttonTIME - lastBTIME > 250)
+      {
+         //Aumento del contador
+         if (count == 3) {
+            count = 0;
+         }
+         else {
+            count = count + 1;
+         }
 
-   lastBTIME = buttonTIME;
-   }
-   }
+      lastBTIME = buttonTIME;
+      }
+      }
 
 Vemos que hay unas condiciones internas que aumentan la cuenta del selector, pero hay una externa que realiza mediciones de tiempo con la funcion `millis()`, ¿para que es esto? básicamente para evitar uno de los problemas más comunes de la interrupciones controladas por pulsadores, el "bouncing", que es básicamente cuando el micro lee erróneamente el accionamiento del pulsador e incrementa la cuenta en valores adicionales. Puedes ver que pulsaste una vez el botón pero tu cuenta aumentó en 2 y no en 1 como debería. Bueno esto es porque el micro lee tan rápido las entradas de los pines que no alcanzas a soltar el botón antes de que vuelva a leer, y así lee como si lo hubieses accionado dos veces. Con esa condición externa, lo que hacemos es aplicar un "debouncing", que básicamente sólo permite que la función de "aumento" sea ejecutada cuando las pulsaciones se encuentran fuera de un rango mínimo de tiempo, para eso utilizamos `millis()`, básicamente le decimos que puede leer el botón sólo una vez cada cierto tiempo, en este caso 250 milisegundos.
 
