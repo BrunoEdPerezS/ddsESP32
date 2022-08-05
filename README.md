@@ -4,7 +4,21 @@ Voy a partir dejando en claro que el objetivo inicial de este proyecto era aprov
 
 La idea es utilizar este oscilador como núcleo dentro de un proyecto más grande relacionado con síntesis de sonido. Pero claro, a medida que se profundiza en el concepto de la síntesis digital directa (DDS en inglés), queda claro que el tema merece una buena explicación, ya que puede ser útil para cualquiera que quiera implementar su propio oscilador digital.
 
-De todas formas si alguien quiere implementar un oscilador de forma rápida y tiene un ESP32, siéntase libre de copiar y pegar el código que esta en el fichero DDS de este repositorio. El código implementa un sintetizador digital directo en la ESP32, que permite entregar 4 tipos de onda distintos, senoidal, triangular, sierra y cuadrada, a travéz del DAC del pin 25. Las formas de onda son intercambiables mediante un pulsador. Que debe ser conectado entre 3.3V y el pin 33. Sientanse libres de utilizar los pines que les acomode y de cambiar este código de acuerdo a lo que estimen necesario, si buscan detalles sobre el funcionamiento del código hay una sección más adelante dedicada a ello. Sin mas retrasos, comenzaré ahora con la explicación completa.
+De todas formas si alguien quiere implementar un oscilador de forma rápida y tiene un ESP32, siéntase libre de copiar y pegar el código que esta en el fichero DDS de este repositorio. El código implementa un sintetizador digital directo en la ESP32, que permite entregar 4 tipos de onda distintos, senoidal, triangular, sierra y cuadrada, a travéz del DAC del pin 25. Las formas de onda son intercambiables mediante un pulsador. Que debe ser conectado entre 3.3V y el pin 33. Sientanse libres de utilizar los pines que les acomode y de cambiar este código de acuerdo a lo que estimen necesario, si buscan detalles sobre el funcionamiento del código hay una sección más adelante dedicada sólo a ello. Sin mas retrasos, comenzaré ahora con la explicación completa.
+
+
+**Índice**
+1. [Entendiendo la oscilación](#id1)
+2. [Osciladores digitales y wavetables](#id2)
+3. [Síntesis digital directa](#id3)
+4. [Código](#id4)
+5. [Conclusión](#id5)
+6. [Referencias](#id6)
+
+
+
+
+<div id='id1' />
 
 ## Entendiendo la oscilación
 
@@ -15,7 +29,7 @@ a lado, adentro y afuera, o arriba y abajo, está vibrando. Una vibración es un
 
 Bueno, vibración = oscilación, y partiendo desde la primicia de que lo que buscamos generar con un oscilador es básicamente una onda de voltaje (la cual más adelante, mediante algún altavoz, esperamos poder transformar en una onda de presión para producir sonido) lo que debemos hacer es producir valores de voltaje con el DAC que varíen en el tiempo de la misma forma en que queremos que varíe la presión del aire. Simple.
 
-La verdad, no tanto, pero todo a su debido tiempo. Partiremos hablando primero de como es que representamos estas oscilaciones.
+La verdad, no tanto, pero todo a su debido tiempo. Partiremos hablando primero de las formas que tenemos de representar estas oscilaciones.
 
 ## Amplitud y fase
 
@@ -43,6 +57,8 @@ Nunca esta demás mencionar que la frecuencia es inversamente proporcional al **
 Perfecto, ahora, no me detendré a explicar el comportamiento del sonido como una onda mecánica y blablabla. Para ello pueden visitar el capítulo 20 del Hewitt, citado anteriormente (realmente lo recomiendo, explica muchas cosas sin entrar en tecnicismos matemáticos muy complejos).
 
 Pero es importante saber que el sonido es una onda mecánica, y que una de sus propiedades mas importantes (musicalmente hablando) es el tono o "pitch", y que este depende de la frecuencia, entre más agudo es el sonido más frecuencia tiene la onda y entre mas grave menos frecuencia, esto directamente ligado a las notas musicales (si, cada nota tiene su respectiva frecuencia). Por ello nos interesa que en en nuestro oscilador sea posible ajustar este parámetro, ya que de aquella forma nos permitirá crear melodías, y no solo patrones rítmicos.
+
+<div id='id2' />
 
 ## Osciladores digitales y wavetables
 
@@ -84,6 +100,8 @@ Seguro algún chistoso se preguntó si hay una forma de disminuir la frecuencia,
 Cuando trabajamos con sistemas digitales, sabemos, supongo que todos, que un dicho digital realiza sus "actividades" de acuerdo a una señal de reloj, que de hecho esta en el diagrama. Bueno, por cada "tick" del reloj, nuestro computador (microcontrolador, microprocesador, lo que sea), actualizará el valor del **adress pointer** de acuerdo al **incremento de fase**. El valor mínimo para el incremento de fase es 1. Ya que el paso mínimo para recorrer el circulo es un punto a la vez. Por lo tanto la frecuencia mínima a la que podemos reproducir la onda es la frecuencia del reloj. Si quieren menor frecuencia, deben cambiar el reloj (cosa que si es posible con preescalers y blablabla, pero es poco práctico). Además esto deja en evidencia que todas las frecuencias que nos es posible reproducir, serán múltiplos de la frecuencia de dicho reloj.
 
 Como resumen, este método funciona, pero nos limita en el rango de frecuencias que podemos alcanzar, además recorrer el circulo en pasos muy grandes significa que por cada ciclo, vamos a entregar menos samples y por lo tanto el aliasing rápidamente se tornará en un problema serio.
+
+<div id='id3' />
 
 ## Síntesis digital directa
 
@@ -136,8 +154,6 @@ Podremos hacer una analogía con el circulo de samples, podemos decir que tendre
 
 De esta forma podemos indexar nuestra wavetable sin tener que utilizar directamente los valores del acumulador de fase. Y además evitamos saltarnos tantos samples a medida que aumentamos la frecuencia disminuyendo esto, el "ruido por error de fase".
 
----
-
 ## Implementación
 
 Finalmente vamos a implementar esto en código. Así que básicamente implementaremos un NCO en el ESP32 y utilizaremos el DAC de 8 bits del para entregar la señal analógica.
@@ -158,14 +174,15 @@ Para esto utilizaremos un timer, que es básicamente un periférico que viene in
 
 #### ISR
 
-Vamos a hablar un poquito sobre las ISR, rutina de servicio de interrupción por sus siglas en inglés o llamadas también como "controlador de interrupción" (interrupt handler), es básicamente una función especial, un bloque de código que se ejecuta en medio de una interrupción. La interrupción es básicamente un evento en el que el procesador "detiene" lo que sea que este haciendo, y realiza una acción. Dicha acción o función estará dentro de la ISR, o más bien, como la ISR es una función, dicha función ES la ISR. Por esto mismo, la regla más importante de la ISR, es que como esta "pausa el programa" para su ejecución, debe ejecutarse lo más rápido posible (como dato a parte, por esto es que esta se almacena en la RAM), por lo tanto debemos evitar la mayor cantidad de código extra dentro de ella. SOLO LO NECESARIO. (La verdad es que depende del proyecto, pero es bueno apegarse a esta regla).
-De esta forma, en la ISR escribiremos el código necesario para aumentar el acumulador de fase y para escribir un valor de amplitud en el DAC.
+Vamos a hablar un poquito sobre las ISR, rutina de servicio de interrupción por sus siglas en inglés o llamadas también como "controlador de interrupción" (interrupt handler), es básicamente una función especial, un bloque de código que se ejecuta en medio de una interrupción. La interrupción es básicamente un evento en el que el procesador "detiene" lo que sea que este haciendo, y realiza una acción. Dicha acción o función estará dentro de la ISR, o más bien, como la ISR es una función, dicha función ES la ISR. Por esto mismo, la regla más importante de la ISR, es que como esta "pausa el programa" para su ejecución, debe ejecutarse lo más rápido posible, así que debemos evitar añadir código innecesario dentro de ella. De esta forma, en la ISR escribiremos el código necesario para aumentar el acumulador de fase y para escribir un valor de amplitud en el DAC.
 
 ---
 
-### Código
+<div id='id4' />
 
-#### Interrupción
+## Código
+
+### Interrupción
 
 Bueno el código esta en el fichero "dds" del repositorio, pero voy a explicar ciertas partes importantes.
 Primero que nada decir que los valores obtenidos para las waveables están escritos en un header que también esta adjunto en el fichero dds. Ahora quiero explicar como setear la interrupción del timer.
@@ -192,7 +209,7 @@ Siguiente, debemos añadir una alarma al timer, ¿que es esto?, es básicamente 
     timerAlarmWrite(My_timer,10, true);
     timerAlarmEnable(My_timer); 
 
-#### NCO
+### NCO
 
 El NCO lo implementaremos en la ISR, para esto declaramos las variables necesarias. En las primeras lineas calculamos la **tuning word** y abajo declaramos las variables para el **acumulador de fase** y el **adress pointer**.
 
@@ -347,6 +364,8 @@ Y bueno con todo esto el código final sería:
 
 Si se dan cuenta el loop queda vacío ya que toda la ejecución del NCO es realizada en las ISR.
 
+<div id='id5' />
+
 ## Conclusión
 
 Espero que se haya entendido al menos mi explicación, y que si alguien ha llegado hasta acá sin tener muchos conocimientos de esto, al menos pueda rescatar algo, intenté cubrir todos los puntos que yo, al intentar llevar a cabo este proyecto no tenía muy claros. Si hay algún error conceptual en la explicación o cualquier otro tipo de error, les agradecería hacérmelo saber, todo sea en pos del conocimiento.
@@ -356,6 +375,8 @@ Ahora si alguien quiere implementar esto en una tarjeta diferente, consideren qu
 Además no hablé de como cambiar las notas en medio de la ejecución, bueno como ya sabrán esto lo hacemos cambiando la **tuning word**, este trabajo no es para nada complicado, pueden usar un look up table, con los valores de M para cada nota musical y así evitar recalcular M cada vez que cambien de nota. Pero bueno como lo dije anteriormente, esto también es tarea para la casa.
 
 Muchas gracias por su atención.
+
+<div id='id6' />
 
 ## Referencias y links interesantes
 
