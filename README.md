@@ -2,7 +2,7 @@
 
 Voy a partir dejando en claro que el objetivo inicial de este proyecto era aprovechar el DAC de 8 bits del ESP32 para construir un oscilador digital.
 
-La idea es utilizar este oscilador como núcleo dentro de un proyecto más grande relacionado con síntesis de sonido. Pero claro, a medida que se profundiza en el concepto de la síntesis digital directa (DDS en inglés), queda claro que el tema merece una buena explicación.
+La idea es utilizar este oscilador como núcleo dentro de un proyecto más grande relacionado con síntesis de sonido. Pero claro, a medida que se profundiza en el concepto de la síntesis digital directa (DDS en inglés), queda claro que el tema merece una buena explicación, ya que puede ser útil para cualquiera que quiera implementar su propio oscilador digital.
 
 De todas formas si alguien quiere implementar un oscilador de forma rápida y tiene un ESP32, siéntase libre de copiar y pegar el código que esta en el fichero DDS de este repositorio. El código implementa un sintetizador digital directo en la ESP32, que permite entregar 4 tipos de onda distintos, senoidal, triangular, sierra y cuadrada, a travéz del DAC del pin 25. Las formas de onda son intercambiables mediante un pulsador. Que debe ser conectado entre 3.3V y el pin 33. Sientanse libres de utilizar los pines que les acomode y de cambiar este código de acuerdo a lo que estimen necesario, si buscan detalles sobre el funcionamiento del código hay una sección más adelante dedicada a ello. Sin mas retrasos, comenzaré ahora con la explicación completa.
 
