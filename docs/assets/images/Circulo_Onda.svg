@@ -1,1 +1,70 @@
-<svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 751 351"><defs><style>.cls-1,.cls-2{fill:#fff;}.cls-1,.cls-3,.cls-4,.cls-5,.cls-6,.cls-8{stroke:#000;stroke-miterlimit:10;}.cls-3,.cls-4,.cls-5,.cls-6,.cls-8{fill:none;}.cls-4{stroke-dasharray:1 1;}.cls-5{stroke-dasharray:1 1;}.cls-6{stroke-dasharray:1;}.cls-7{font-size:12px;font-family:MyriadPro-Regular, Myriad Pro;}.cls-8{stroke-dasharray:1 1;}</style></defs><rect class="cls-1" x="0.5" y="0.5" width="750" height="350" rx="26.64"/><circle class="cls-2" cx="162.44" cy="183.84" r="99.5"/><path d="M162.44,84.84a99,99,0,1,1-99,99,99.12,99.12,0,0,1,99-99m0-1a100,100,0,1,0,100,100,100,100,0,0,0-100-100Z"/><polyline class="cls-1" points="298.56 183.82 336.14 183.82 398.56 183.82"/><line class="cls-1" x1="398.56" y1="183.82" x2="498.56" y2="183.82"/><line class="cls-1" x1="498.56" y1="183.82" x2="598.56" y2="183.82"/><path class="cls-3" d="M598.56,183.82h100"/><line class="cls-3" x1="598.56" y1="183.82" x2="698.56" y2="183.82"/><path class="cls-3" d="M698.56,183.82c-28.8,86.4-75.27,100-100,100-21.07,0-63.33-10.78-100-100.43-40.72-99.57-79.53-99.57-100-99.57-16.29,0-68.38,4.62-100,100"/><path class="cls-3" d="M262.18,183.82h-100v-100"/><line class="cls-3" x1="162.18" y1="183.82" x2="232.89" y2="113.11"/><line class="cls-3" x1="232.37" y1="113.63" x2="232.87" y2="113.63"/><line class="cls-4" x1="233.87" y1="113.63" x2="335.14" y2="113.63"/><polyline class="cls-3" points="335.64 113.63 336.14 113.63 336.14 114.13"/><line class="cls-5" x1="336.14" y1="115.13" x2="336.14" y2="182.82"/><line class="cls-3" x1="336.14" y1="183.32" x2="336.14" y2="183.82"/><line class="cls-6" x1="162.31" y1="84.35" x2="402.06" y2="83.84"/><line class="cls-6" x1="261.63" y1="183.82" x2="299.35" y2="183.82"/><line class="cls-6" x1="400.9" y1="83.82" x2="400.9" y2="183.82"/><circle class="cls-1" cx="261.63" cy="183.82" r="2.5"/><circle class="cls-1" cx="299.35" cy="183.82" r="2.5"/><circle class="cls-1" cx="232.37" cy="113.63" r="2.5"/><circle class="cls-1" cx="336.14" cy="113.63" r="2.5"/><circle class="cls-1" cx="162.31" cy="83.84" r="2.5"/><circle class="cls-1" cx="400.9" cy="83.82" r="2.5"/><text class="cls-7" transform="translate(264.13 179.41)">0º</text><text class="cls-7" transform="translate(300.07 194.22)">0º</text><text class="cls-7" transform="translate(328.88 194.22)">30º</text><text class="cls-7" transform="translate(394.48 194.22)">90º</text><text class="cls-7" transform="translate(208.73 148.72)">30º</text><text class="cls-7" transform="translate(164.81 103.11)">90º</text><path class="cls-8" d="M37.7,178.17A125,125,0,0,1,162.44,61.32"/><path d="M37.85,176.38,34.34,174l-.08.12,2.08,6c.37,2.06.73,4.13,1.1,6.19.53-2,1.07-4,1.6-6.08l2.58-5.77-.06-.13Z"/></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 751 351" style="enable-background:new 0 0 751 351;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;}
+	.st1{fill:#FFFFFF;}
+	.st2{fill:none;stroke:#000000;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#000000;stroke-miterlimit:10;stroke-dasharray:1,1;}
+	.st4{fill:none;stroke:#000000;stroke-miterlimit:10;stroke-dasharray:1;}
+	.st5{font-family:'ArialMT';}
+	.st6{font-size:12px;}
+	.st7{fill:none;stroke:#000000;stroke-miterlimit:10;stroke-dasharray:0.9949,0.9949;}
+	.st8{fill:none;stroke:#000000;stroke-miterlimit:10;stroke-dasharray:0.9972,0.9972;}
+	.st9{fill:none;stroke:#000000;stroke-miterlimit:10;stroke-dasharray:0.9966,0.9966;}
+</style>
+<path class="st0" d="M27.1,0.5h696.7c14.7,0,26.6,11.9,26.6,26.6v296.7c0,14.7-11.9,26.6-26.6,26.6H27.1
+	c-14.7,0-26.6-11.9-26.6-26.6V27.1C0.5,12.4,12.4,0.5,27.1,0.5z"/>
+<circle class="st1" cx="162.4" cy="183.8" r="99.5"/>
+<path d="M162.4,84.8c54.7,0,99,44.3,99,99s-44.3,99-99,99s-99-44.3-99-99C63.5,129.2,107.8,84.9,162.4,84.8 M162.4,83.8
+	c-55.2,0-100,44.8-100,100s44.8,100,100,100s100-44.8,100-100S217.7,83.8,162.4,83.8z"/>
+<polyline class="st0" points="298.6,183.8 336.1,183.8 398.6,183.8 "/>
+<line class="st2" x1="398.6" y1="183.8" x2="498.6" y2="183.8"/>
+<line class="st2" x1="498.6" y1="183.8" x2="598.6" y2="183.8"/>
+<path class="st2" d="M598.6,183.8h100"/>
+<line class="st2" x1="598.6" y1="183.8" x2="698.6" y2="183.8"/>
+<path class="st2" d="M698.6,183.8c-28.8,86.4-75.3,100-100,100c-21.1,0-63.3-10.8-100-100.4c-40.7-99.6-79.5-99.6-100-99.6
+	c-16.3,0-68.4,4.6-100,100"/>
+<path class="st2" d="M262.2,183.8h-43.8h-56.2v-100"/>
+<line class="st2" x1="162.2" y1="183.8" x2="232.9" y2="113.1"/>
+<line class="st2" x1="232.4" y1="113.6" x2="232.9" y2="113.6"/>
+<line class="st3" x1="233.9" y1="113.6" x2="335.1" y2="113.6"/>
+<polyline class="st2" points="335.6,113.6 336.1,113.6 336.1,114.1 "/>
+<line class="st3" x1="336.1" y1="115.1" x2="336.1" y2="182.8"/>
+<line class="st2" x1="336.1" y1="183.3" x2="336.1" y2="183.8"/>
+<line class="st4" x1="162.3" y1="84.3" x2="402.1" y2="83.8"/>
+<line class="st4" x1="261.6" y1="183.8" x2="299.4" y2="183.8"/>
+<line class="st4" x1="400.9" y1="83.8" x2="400.9" y2="183.8"/>
+<circle class="st0" cx="261.6" cy="183.8" r="2.5"/>
+<circle class="st0" cx="299.4" cy="183.8" r="2.5"/>
+<circle class="st0" cx="232.4" cy="113.6" r="2.5"/>
+<circle class="st0" cx="336.1" cy="113.6" r="2.5"/>
+<circle class="st0" cx="162.3" cy="83.8" r="2.5"/>
+<circle class="st0" cx="400.9" cy="83.8" r="2.5"/>
+<text transform="matrix(1 0 0 1 266.4279 179.4099)" class="st5 st6">0º</text>
+<text transform="matrix(1 0 0 1 300.07 194.22)" class="st5 st6">0º</text>
+<text transform="matrix(1 0 0 1 328.88 194.22)" class="st5 st6">45º</text>
+<text transform="matrix(1 0 0 1 394.48 194.22)" class="st5 st6">90º</text>
+<text transform="matrix(1 0 0 1 199.032 167.7928)" class="st5 st6">45º</text>
+<text transform="matrix(1 0 0 1 164.8102 155.7057)" class="st5 st6">90º</text>
+<path class="st3" d="M37.7,178.2C42,112.4,96.6,61.3,162.4,61.3"/>
+<path d="M37.8,176.4l-3.5-2.4l-0.1,0.1l2.1,6c0.4,2.1,0.7,4.1,1.1,6.2c0.5-2,1.1-4,1.6-6.1l2.6-5.8l-0.1-0.1L37.8,176.4z"/>
+<path d="M162.4,133.8"/>
+<g>
+	<g>
+		<line class="st2" x1="162.2" y1="140.9" x2="162.7" y2="140.9"/>
+		<line class="st7" x1="163.7" y1="140.9" x2="189" y2="140.9"/>
+		<polyline class="st2" points="189.5,140.9 190,140.9 190,141.4 		"/>
+		<line class="st8" x1="190" y1="142.4" x2="190" y2="181.8"/>
+		<line class="st2" x1="190" y1="182.3" x2="190" y2="182.8"/>
+	</g>
+</g>
+<g>
+	<g>
+		<path class="st2" d="M208,138c0.2,0,0.3,0.1,0.5,0.1"/>
+		<path class="st9" d="M209.4,138.5c10.2,5.1,19.1,35.6,11.2,44.6"/>
+		<path class="st2" d="M220.3,183.5c-0.1,0.1-0.2,0.2-0.4,0.3"/>
+	</g>
+</g>
+</svg>

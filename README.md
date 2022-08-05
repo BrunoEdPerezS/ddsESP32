@@ -2,9 +2,9 @@
 
 Voy a partir dejando en claro que el objetivo inicial de este proyecto era aprovechar el DAC de 8 bits del ESP32 para construir un oscilador digital.
 
-La idea era utilizar este oscilador como núcleo dentro de un proyecto más grande relacionado con síntesis de sonido. Pero claro, a medida que se profundiza en el concepto de la síntesis digital directa (DDS en inglés), queda claro que el tema da para un post completo.
+La idea es utilizar este oscilador como núcleo dentro de un proyecto más grande relacionado con síntesis de sonido. Pero claro, a medida que se profundiza en el concepto de la síntesis digital directa (DDS en inglés), queda claro que el tema merece una buena explicación.
 
-El objetivo de este post más que nada es hacer un overview de, que es y como funciona DDS, además de una pequeña guía de como implementarlo en alguna plataforma de control digital.
+De todas formas si alguien quiere implementar un oscilador de forma rápida y tiene un ESP32, siéntase libre de copiar y pegar el código que esta en el fichero DDS de este repositorio. El código implementa un sintetizador digital directo en la ESP32, que permite entregar 4 tipos de onda distintos, senoidal, triangular, sierra y cuadrada, a travéz del DAC del pin 25. Las formas de onda son intercambiables mediante un pulsador. Que debe ser conectado entre 3.3V y el pin 33. Sientanse libres de utilizar los pines que les acomode y de cambiar este código de acuerdo a lo que estimen necesario, si buscan detalles sobre el funcionamiento del código hay una sección más adelante dedicada a ello. Sin mas retrasos, comenzaré ahora con la explicación completa.
 
 ## Entendiendo la oscilación
 
@@ -13,7 +13,7 @@ Para empezar con el tema de DDS, primero que nada debemos entender que es una os
 > En un sentido general, todo lo que se mueve de ida y vuelta, atrás y adelante, de lado
 a lado, adentro y afuera, o arriba y abajo, está vibrando. Una vibración es un meneo periódico en el tiempo. Un meneo periódico tanto en el espacio como en el tiempo es una onda.
 
-Bueno, vibración = oscilación, y partiendo desde la primicia de que lo que buscamos generar con un oscilador es básicamente una onda de voltaje (la cual esperamos, más adelante, mediante algún altavoz poder transformar en una onda de presión, sonido para los amigos...) lo que debemos hacer es producir valores de voltaje que varíen en el tiempo de la misma forma en que queremos que varíe la presión del aire. Simple.
+Bueno, vibración = oscilación, y partiendo desde la primicia de que lo que buscamos generar con un oscilador es básicamente una onda de voltaje (la cual más adelante, mediante algún altavoz, esperamos poder transformar en una onda de presión para producir sonido) lo que debemos hacer es producir valores de voltaje con el DAC que varíen en el tiempo de la misma forma en que queremos que varíe la presión del aire. Simple.
 
 La verdad, no tanto, pero todo a su debido tiempo. Partiremos hablando primero de como es que representamos estas oscilaciones.
 
@@ -29,7 +29,7 @@ Bien, vamos a explicar más detalladamente esto de la fase. Cuando tenemos una o
 
 A partir de esto es que podemos decir, que la posición del punto, a lo largo de la trayectoriam representa la **fase**, "en que posición se encuentra la onda a lo largo del ciclo", y como dicho ciclo es representado en la circunferencia, su posición PUEDE ser representada por el ángulo entre la posición actual de la oscilación y el punto de referencia. A partir de esto, es que podemos ver que realmente, el valor de la amplitud de dicha onda, es una función de la **fase** la cual varía de forma constante en función al tiempo.
 
-Espero que con esto haya quedado claro el tema de la fase (sino pueden revisar el concepto de **"fasor"** en algún libro de física). Sin embargo aún queda hablar de otra propiedad importante de las ondas, la cual es la frecuencia.
+Espero que con esto haya quedado claro el tema de la fase (sino, pueden revisar el concepto de **"fasor"** en algún libro de física). Sin embargo aún queda hablar de otra propiedad importante de las ondas, la cual es la frecuencia.
 Esta propiedad puede ser definida como...
 > ... la medida del número de veces que se repite la oscilación en cierto instante de tiempo.
 
@@ -53,7 +53,7 @@ Básicamente la síntesis por wavetable es una técnica de síntesis que permite
 ¿Y que es una wavetable?, bueno, es básicamente un arreglo, de ondas, que poseen una forma similar, PERO, distinto contenido armónico.
 Es literalmente un arreglo (o array para los amigos) tridimensional que almacena dos valores. Amplitud (para un ciclo de onda) y un elemento que nos dice cual de las ondas con "distinto contenido armónico" hay que reproducir.
 
-Es efectivamente un array de dos dimensiones. Pero con una particularidad. Para graficar una oscilación necesitamos dos elementos, fase y amplitud. Bueno nuestro array contiene "Amplitud" e "índice de onda", ¿de donde sacamos la fase?. Como la wavetable almacena valores de amplitud para **un ciclo de onda** podemos utilizar el valor del índice de dichas amplitudes como valores de fase, claro no estarán en ángulos, como debería, pero si representará en que estado se encuentra la oscilación dentro del su propio ciclo, diciéndonos en que "sample" o en que "punto" del circulo nos encontramos.
+Es efectivamente un array de dos dimensiones. Pero con una particularidad. Para graficar una oscilación necesitamos dos elementos, fase y amplitud. Bueno nuestro array contiene "amplitud" e "índice de onda", ¿de donde sacamos la fase?. Como la wavetable almacena valores de amplitud para **un sólo ciclo de onda** podemos utilizar el valor del índice de dichas amplitudes como valores de fase, claro no estarán en ángulos, como acostumbramos a ver, pero si representará en que estado se encuentra la oscilación dentro del su propio ciclo, diciéndonos en que "sample" o en que "punto" del circulo nos encontramos.
 
 Con todo esto dicho, ahora nos hace un poco más de sentido la clásica vista tridimensional que poseen los osciladores en los sintetizadores de wavetable como Serum y Vital. Básicamente graficamos, los valores de amplitud, su correspondiente índice y el índice de onda.
 
@@ -89,7 +89,7 @@ Como resumen, este método funciona, pero nos limita en el rango de frecuencias 
 
 Bien, para solucionar esto vamos a implementar finalmente, la Síntesis Digital Directa (DDS por siglas en ingles). Un esquema básico de esté método se compone de, un "control de frecuencia", un oscilador controlado numéricamente (NCO por siglas en inglés) y el convertidor digital-analógico (DAC por siglas en inglés). Ahora hablaremos de que hace cada uno.
 
-ESQUEMA DDS
+![Representacion](docs/assets/images/DDSbloques.svg)
 
 ### Control de frecuencia
 
@@ -97,9 +97,9 @@ Alguno eruditos lo llaman "registro de control de frecuencia" o cosas más sofis
 
 Básicamente lo que hacemos en este bloque es resolver la siguiente ecuación:
 
-$$ M =\frac{F_{salida} \;2^{N}}{F_{CLK}}$$
+$$ M =\frac{F_{salida} 2^{N}}{F_{CLK}}$$
 
-De esta forma calculamos el valor adecuado para M que nos entregue la frecuencia de salida ($F_{salida}$) deseada. Siendo conocidos el valor de la frecuencia de reloj ($F_{CLK}$) y el valor de N, del cual hablaremos más adelante.
+De esta forma calculamos el valor adecuado para M que nos entregue la frecuencia de salida ($ F_{salida} $) deseada. Siendo conocidos el valor de la frecuencia de reloj ($F_{CLK}$) y el valor de N, del cual hablaremos más adelante.
 
 ### Oscilador controlado numéricamente (NCO)
 
@@ -128,13 +128,17 @@ Iteraciones|Acumulador  | P | índice |
 4|  0111 1000 | 01 | 1 |
 3|  1001 0110 | 10 | 2 |
 
-Como podemos ver en la tabla, el índice de la wavetable no cambia con cada cuenta, sino que cambia solo cada vez que cambian los dos primeros bits del acumulador (que son los que utilizamos para indexar), sin embargo nuestro acumulador sigue contando con los 8 bits que le corresponden ¿por qué? Porque como solo estamos "truncando" esos bits para indexar, lo que hacemos es contar a travez de un circulo con $2^{N}$ puntos pero solamente enviar un sample distinto cada vez que cambian los bits de P. Es como si contáramos a través de valores intermedios en el circulo de samples.
+Como podemos ver en la tabla, el índice de la wavetable no cambia con cada cuenta, sino que cambia solo cada vez que cambian los dos primeros bits del acumulador (que son los que utilizamos para indexar), sin embargo nuestro acumulador sigue contando con los 8 bits que le corresponden ¿por qué? Porque como solo estamos "truncando" esos bits para indexar, lo que hacemos es contar a travez de un circulo con $2^{N}$ puntos pero solamente enviar un sample distinto cada vez que cambian los bits de P. 
 
-IMAGEN DOS CIRCULOS DE SAMPLES
+Podremos hacer una analogía con el circulo de samples, podemos decir que tendremos un círculo con P puntos, que serán los samples, pero que contaremos a travéz de $2^{N}$ puntos que estarán repartidos a lo largo del circulo (puntos en negro), cada vez que nuestra cuenta sobrepase un circulo blanco, en el diagrama, se imprimirá dicho sample a travéz del DAC.
+
+![Representacion](docs/assets/images/circuloCirculo.svg)
 
 De esta forma podemos indexar nuestra wavetable sin tener que utilizar directamente los valores del acumulador de fase. Y además evitamos saltarnos tantos samples a medida que aumentamos la frecuencia disminuyendo esto, el "ruido por error de fase".
 
-## Implementacion
+---
+
+## Implementación
 
 Finalmente vamos a implementar esto en código. Así que básicamente implementaremos un NCO en el ESP32 y utilizaremos el DAC de 8 bits del para entregar la señal analógica.
 
@@ -156,6 +160,8 @@ Para esto utilizaremos un timer, que es básicamente un periférico que viene in
 
 Vamos a hablar un poquito sobre las ISR, rutina de servicio de interrupción por sus siglas en inglés o llamadas también como "controlador de interrupción" (interrupt handler), es básicamente una función especial, un bloque de código que se ejecuta en medio de una interrupción. La interrupción es básicamente un evento en el que el procesador "detiene" lo que sea que este haciendo, y realiza una acción. Dicha acción o función estará dentro de la ISR, o más bien, como la ISR es una función, dicha función ES la ISR. Por esto mismo, la regla más importante de la ISR, es que como esta "pausa el programa" para su ejecución, debe ejecutarse lo más rápido posible (como dato a parte, por esto es que esta se almacena en la RAM), por lo tanto debemos evitar la mayor cantidad de código extra dentro de ella. SOLO LO NECESARIO. (La verdad es que depende del proyecto, pero es bueno apegarse a esta regla).
 De esta forma, en la ISR escribiremos el código necesario para aumentar el acumulador de fase y para escribir un valor de amplitud en el DAC.
+
+---
 
 ### Código
 
@@ -340,6 +346,8 @@ Y bueno con todo esto el código final sería:
       }
 
 Si se dan cuenta el loop queda vacío ya que toda la ejecución del NCO es realizada en las ISR.
+
+## Conclusión
 
 Espero que se haya entendido al menos mi explicación, y que si alguien ha llegado hasta acá sin tener muchos conocimientos de esto, al menos pueda rescatar algo, intenté cubrir todos los puntos que yo, al intentar llevar a cabo este proyecto no tenía muy claros. Si hay algún error conceptual en la explicación o cualquier otro tipo de error, les agradecería hacérmelo saber, todo sea en pos del conocimiento.
 
