@@ -86,7 +86,7 @@ Lindo, peeeeero, ¿y el sonido? Bueno, los valores de la amplitud en tabla anter
    1|  10 |
    2|   5 |
 
-Bueno ahora, imaginemos que tengo una tabla, como la de arriba, con los valores de amplitud y fase, que representan **un ciclo** de una onda senoidal. para reproducirla, bastaría con lo dicho anteriormente, solo hay que recorrer la columna de fase, y reproducir su respectiva amplitud.
+Bueno ahora, imaginemos que tengo una tabla, como la de arriba, con los valores de amplitud y sus respectivos índices o fases, que representan **un ciclo** de una onda senoidal. para reproducirla, bastaría con lo dicho anteriormente, solo hay que recorrer el arreglo a travéz de sus índices, y reproducir sus respectivas amplitudes.
 
 Para hacer esto necesitaremos, primero que nada la wavetable, un contador llamado **adress pointer**, que representará el índice al cual consultaremos para extraer su correspondiente amplitud, y una tercera variable, llamada **incremento de fase**, la cual nos dará el valor del **adress pointer** para obtener una frecuencia determinada. ¿Qué? Bueno, volvamos al circulo.
 
