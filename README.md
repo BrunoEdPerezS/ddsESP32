@@ -99,7 +99,7 @@ Básicamente lo que hacemos en este bloque es resolver la siguiente ecuación:
 
 $$ M =\frac{F_{salida} 2^{N}}{F_{CLK}}$$
 
-De esta forma calculamos el valor adecuado para M que nos entregue la frecuencia de salida ($ F_{salida} $) deseada. Siendo conocidos el valor de la frecuencia de reloj ($F_{CLK}$) y el valor de N, del cual hablaremos más adelante.
+De esta forma calculamos el valor adecuado para M que nos entregue la frecuencia de salida, $F_{salida}$ deseada. Siendo conocidos el valor de la frecuencia de reloj, $F_{CLK}$ y el valor de $N$, del cual hablaremos más adelante.
 
 ### Oscilador controlado numéricamente (NCO)
 
